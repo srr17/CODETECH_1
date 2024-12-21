@@ -43,3 +43,5 @@ The objective of this project was to measure and display real-time temperature a
 - Developed skills in testing and validating hardware and software integration.  
 
 ---  
+
+![image](https://github.com/user-attachments/assets/7b95bc3f-c6ee-4316-afba-1b912227186e)

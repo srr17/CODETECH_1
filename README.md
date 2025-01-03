@@ -1,47 +1,54 @@
-# CODETECH_1  
-**Name:** SOHAN RANE  
-**Company:** CODTECH IT SOLUTIONS PVT. LTD  
-**ID:** CT12DQD  
-**Domain:** Embedded Systems  
-**Duration:** December 12, 2024 – February 12, 2025  
-**Mentor:** Sravani Gouni  
+#include <SoftwareSerial.h>
 
----
+// Define the software serial pins for communication with Voice Recognition Module
+SoftwareSerial voiceSerial(2, 3); // RX, TX pins (adjust as necessary)
 
-## Overview of the Project  
-**Project:** Interfacing a DHT Sensor with Arduino for Temperature and Humidity Monitoring  
+// Pin for controlling an LED (or other device)
+const int ledPin = 13;
 
-**Objective:**  
-The objective of this project was to measure and display real-time temperature and humidity data using a DHT11 sensor and Arduino. The data was outputted to the Serial Monitor, providing a simple and interactive way to observe environmental changes.  
+void setup() {
+  // Start serial communication for debugging
+  Serial.begin(9600);
+  voiceSerial.begin(9600);
 
----
+  pinMode(ledPin, OUTPUT); // Initialize LED pin as output
 
-## Key Activities  
-- **Sensor Integration:** Connected the DHT11 sensor to the Arduino to capture temperature and humidity readings.  
-- **Code Development:** Wrote a beginner-friendly Arduino sketch to process the data and handle sensor errors.  
-- **Data Output:** Configured the Serial Monitor for real-time display of temperature and humidity values.  
-- **Error Handling:** Implemented functionality to detect and handle sensor failures gracefully.  
-- **Testing and Validation:** Conducted multiple rounds of testing to verify the accuracy and consistency of sensor data.  
-- **Documentation:** Prepared detailed documentation to explain the project setup and usage, making it easy for beginners to replicate.  
+  // Wait for the Voice Recognition Module to be ready
+  Serial.println("Initializing Voice Recognition Module...");
+  delay(2000);
 
----
+  // Load the voice model (stored in the Voice Recognition Module V3)
+  // The model is assumed to be pre-trained with commands like "Turn on light" and "Turn off light"
+  if (voiceSerial.available()) {
+    Serial.println("Voice recognition module is ready.");
+  } else {
+    Serial.println("Failed to communicate with the Voice Recognition Module.");
+  }
+}
 
-## Technologies Used  
-- **Arduino UNO:** Microcontroller used for the project.  
-- **DHT11 Sensor:** For collecting temperature and humidity data.  
-- **DHT Library:** To interface the sensor with Arduino code.  
-- **Arduino IDE:** For programming and uploading the code.  
-- **Serial Monitor:** Used to visualize real-time sensor data.  
-- **USB Cable:** For communication and power supply between the computer and Arduino board.  
+void loop() {
+  // Check if voice command data is available
+  if (voiceSerial.available()) {
+    int command = voiceSerial.read(); // Read the recognized command from the voice module
+    
+    // Print the recognized command
+    Serial.print("Command received: ");
+    Serial.println(command);
 
----
+    // Process the command (here we use command numbers as placeholders)
+    // Example: 0 for "Turn on light", 1 for "Turn off light"
+    if (command == 0) {
+      digitalWrite(ledPin, HIGH); // Turn on the LED
+      Serial.println("Turn on light command received.");
+    }
+    else if (command == 1) {
+      digitalWrite(ledPin, LOW);  // Turn off the LED
+      Serial.println("Turn off light command received.");
+    }
+    else {
+      Serial.println("Unrecognized command.");
+    }
+  }
 
-## Learning Outcomes  
-- Gained hands-on experience in sensor interfacing and data acquisition.  
-- Improved proficiency in writing and debugging Arduino code.  
-- Understood the importance of error handling in embedded systems.  
-- Developed skills in testing and validating hardware and software integration.  
-
----  
-
-![image](https://github.com/user-attachments/assets/7b95bc3f-c6ee-4316-afba-1b912227186e)
+  delay(100); // Small delay for stability
+}
